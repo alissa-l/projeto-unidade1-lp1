@@ -7,7 +7,7 @@
 class Astronauta {
 public:
     Astronauta() { }
-    Astronauta(std::string cpf, std::string nome, int idade) {}
+    Astronauta(std::string cpf, std::string nome, int idade, bool ocupado, bool vivo) {}
 
     std::string cpf;
     std::string nome;
@@ -18,16 +18,63 @@ public:
 
 class Voo {
 public:
+    Voo(){}
+    Voo(int codigoVoo, Astronauta astronautas[])
+
     int codigoVoo;
     Astronauta astronautas[MAX_SIZE];
 };
 
 // Estruturas
 std::vector<Astronauta> astronautas;
+std::vector<Voo> voos;
 
-int cadastrarAstronauta() {
-    std::cout << "Digite o cpf "
-    std::cin >>
+void cadastrarAstronauta() {
+    std::string cpf;
+    std::cout << "Digite o cpf do astronatua: ";
+    std::cin >> cpf;
+
+    std::string nome;
+    std::cout << "Digite o nome do astronauta: ";
+    std::cin >> nome;
+
+    int idade;
+    std::cout << "Digite a idade do astronauta: ";
+    std::cin >> idade;
+
+    Astronauta astronauta = Astronauta(cpf, nome, idade, false, true);
+    astronautas.push_back(astronauta);
+
+    std::cout << "Astronauta " << nome << " cadastrado(a)";
+}
+
+Astronauta findAstronauta(std::string cpf) {
+
+
+
+}
+
+void cadastrarVoo() {
+    std::string codigo;
+    std::cout << "Digite o código de voo: ";
+    std::cin >> codigo;
+
+    char opcao;
+    std::cout << "Gostaria de cadastrar um astronauta ao voo? (S/N) ";
+    std::cin >> opcao;
+
+    Voo voo = Voo()
+    if (opcao == 'S' || opcao == 's') {
+        while(true) {
+            std::string cpf;
+            std::cout << "Digite o cpf do astronauta que quer cadastrar no voo: ";
+            std::cin >> cpf;
+
+            Astronauta astronauta = findAstronauta(cpf);
+
+
+        }
+    }
 }
 
 int main() {
@@ -58,7 +105,7 @@ int main() {
 
         switch (opcao) {
             case 1:
-
+                cadastrarAstronauta();
             case 2:
             case 3:
             case 4:
