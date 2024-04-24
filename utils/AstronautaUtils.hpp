@@ -38,6 +38,13 @@ public:
     }
 
     static vector<string> listAstronautas(map<string, Astronauta> &astronautas) {
-        
+        vector<string> astronautasStr;
+
+        for (map<string, Astronauta>::iterator it = astronautas.begin(); it != astronautas.end(); it++) {
+            //astronautasStr.push_back(Astronauta::to_string(it->second));
+            cout << Astronauta::to_string(it->second);
+        }
+
+        return astronautasStr;
     }
 };

@@ -12,7 +12,7 @@ public:
     bool ocupado;
     bool vivo;
 
-    string to_string(Astronauta astronauta) const {
+    static string to_string(Astronauta astronauta) {
         int idade = astronauta.idade;
         string idadeStr = std::to_string(idade);
         return ("Nome: " + astronauta.nome + "\n CPF: " + astronauta.cpf + "\n Idade: " + idadeStr);

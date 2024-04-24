@@ -24,6 +24,8 @@ public:
         Voo voo = Voo();
         if (opcao == 'S' || opcao == 's') {
             while (true) {
+                AstronautaUtils::listAstronautas(astronautas);
+
                 string cpf;
                 cout << "Digite o cpf do astronauta que quer cadastrar no voo: ";
                 cin >> cpf;
