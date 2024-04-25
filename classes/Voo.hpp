@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "../classes/Astronauta.hpp"
 
 using namespace std;
 
@@ -15,8 +16,16 @@ public:
     vector<Astronauta> astronautas;
 
     static string to_string(Voo voo) {
-        int idade = voo.codigoVoo;
-        string idadeStr = std::to_string(idade);
-        return ("Voo - código: " + voo.codigoVoo + "\nCPF: " + astronauta.cpf + "\nIdade: " + idadeStr);
+        int codigo = voo.codigoVoo;
+        string codigoStr = std::to_string(codigo);
+
+        string astronautas;
+
+        for(vector<Astronauta>::iterator it = voo.astronautas.begin(); it != voo.astronautas.end(); it++) {
+            astronautas = astronautas + Astronauta::to_string(*it);
+        }
+
+        return ("Voo - " + codigoStr + "\n" + astronautas);
+
     }
 };

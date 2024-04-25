@@ -59,7 +59,7 @@ class VooUtils {
         map<int, Voo>::iterator it = voos.begin();
 
         for(it; it != voos.end(); it++) {
-            
+            Voo::to_string(*it);
         }
         
         cout << "Astronautas disponiveis:" << endl;
