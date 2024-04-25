@@ -3,17 +3,17 @@
 #include <map>
 #include <string>
 
-#include "Astronauta.hpp"
-#include "Voo.hpp"
+#include "classes/Astronauta.hpp"
+#include "classes/Voo.hpp"
 
-#include "AstronautaUtils.hpp"
-#include "vooUtils.hpp"
+#include "utils/AstronautaUtils.hpp"
+#include "utils/vooUtils.hpp"
 
 using namespace std;
 
 // Estruturas
 map<string, Astronauta> astronautas;
-map<int ,Voo> voos;
+map<int, Voo> voos;
 
 
 int main() {
@@ -31,11 +31,11 @@ int main() {
     while (true) {
 
         cout << "Selecione a ação que quer realizar:" << endl
-                  << "1 - CADASTRAR ASTROUNAUTA\t\t\t\t2 - CADASTRAR VOO" << endl
+                  << "1 - CADASTRAR ASTRONAUTA\t\t\t2 - CADASTRAR VOO" << endl
                   << "3 - ADICIONAR ASTRONAUTA A UM VOO\t\t4 - REMOVER ASTRONAUTA DE UM VOO" << endl
-                  << "4 - LANÇAR UM VOO\t\t\t\t\t\t5-EXPLODIR UM VOO" << endl
+                  << "4 - LANÇAR UM VOO\t\t\t\t5 - EXPLODIR UM VOO" << endl
                   << "6 - FINALIZAR UM VOO COM SUCESSO\t\t7 - LISTAR TODOS OS VOOS" << endl
-                  << "8 - LISTAR TODOS OS ASTRONAUTAS MORTOS\t9 - ENCERRAR O PROGRAMA" << endl << endl;
+                  << "8 - LISTAR TODOS OS ASTRONAUTAS MORTOS\t\t9 - ENCERRAR O PROGRAMA" << endl << endl;
         cout << flush;
 
         int opcao;
@@ -46,8 +46,10 @@ int main() {
         switch (opcao) {
             case 1:
                 AstronautaUtils::cadastrarAstronauta(astronautas);
+                break;
             case 2:
                 VooUtils::cadastrarVoo(voos, astronautas);
+                break;
             case 3:
             case 4:
             case 5:

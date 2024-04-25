@@ -1,8 +1,10 @@
+#pragma once
+
 #include <string>
 #include <map>
 #include <vector>
 
-#include "Astronauta.hpp"
+#include "../classes/Astronauta.hpp"
 
 using namespace std;
 
@@ -11,7 +13,7 @@ public:
     static map<string, Astronauta> cadastrarAstronauta(map<string, Astronauta> &astronautas) {
 
         string cpf;
-        cout << "Digite o cpf do astronatua: ";
+        cout << "Digite o cpf do astronauta: ";
         cin >> cpf;
 
         string nome;
@@ -26,25 +28,34 @@ public:
 
         if (astronautas.find(cpf) == astronautas.end()) {
             astronautas[cpf] = astronauta;
-            cout << "Astronauta " << nome << " cadastrado(a)" << endl;
+            cout << "Astronauta " << nome << " cadastrado(a)" << endl << endl;
         }
         else {
             cout << "Um astronauta com este cpf já existe" << endl;
         }
+
+        return astronautas;
     }
 
     static Astronauta findAstronauta(string cpf, map<string, Astronauta> &astronautas) {
         return astronautas[cpf];
     }
 
-    static vector<string> listAstronautas(map<string, Astronauta> &astronautas) {
-        vector<string> astronautasStr;
+    static map<string, Astronauta> listAstronautasVivosDisponiveis(map<string, Astronauta> &astronautas, bool print) {
+        map<string, Astronauta> astronautasVivosDisponiveis;
 
         for (map<string, Astronauta>::iterator it = astronautas.begin(); it != astronautas.end(); it++) {
-            //astronautasStr.push_back(Astronauta::to_string(it->second));
-            cout << Astronauta::to_string(it->second);
+            Astronauta astronautaAtual = it->second;
+
+            if (astronautaAtual.vivo && !astronautaAtual.ocupado) {
+                astronautasVivosDisponiveis[astronautaAtual.cpf] = astronautaAtual;
+            }
+
+            if (print) {
+            cout << endl << Astronauta::to_string(it->second) << endl;
+            }
         }
 
-        return astronautasStr;
+        return astronautasVivosDisponiveis;
     }
 };
