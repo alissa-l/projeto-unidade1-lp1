@@ -43,14 +43,18 @@ int main() {
         cin >> opcao;
 
 
+                map<string, Astronauta> &astronautasRef = astronautas;
+                map<int, Voo> &voosRef = voos;
         switch (opcao) {
             case 1:
-                AstronautaUtils::cadastrarAstronauta(astronautas);
+                AstronautaUtils::cadastrarAstronauta(astronautasRef);
                 break;
             case 2:
-                VooUtils::cadastrarVoo(voos, astronautas);
+                VooUtils::cadastrarVoo(voosRef, astronautasRef);
                 break;
             case 3:
+                VooUtils::cadastrarAstronautaVoo(voos, astronautas);
+                break;
             case 4:
             case 5:
             case 6:

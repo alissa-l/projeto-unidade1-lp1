@@ -23,7 +23,7 @@ public:
     static string to_string(Astronauta astronauta) {
         int idade = astronauta.idade;
         string idadeStr = std::to_string(idade);
-        return ("Nome: " + astronauta.nome + "\nCPF: " + astronauta.cpf + "\nIdade: " + idadeStr);
+        return ("Nome: " + astronauta.nome + "\nCPF: " + astronauta.cpf + "\nIdade: " + idadeStr + "\nOcupado(a): " + ((astronauta.ocupado) ? "Sim" : "Não") + "\n");
     }
 };
 

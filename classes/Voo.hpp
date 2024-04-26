@@ -25,7 +25,7 @@ public:
             astronautas = astronautas + Astronauta::to_string(*it);
         }
 
-        return ("Voo - " + codigoStr + "\n" + astronautas);
+        return ("Voo - " + codigoStr + "\n" + astronautas + "\n");
 
     }
 };

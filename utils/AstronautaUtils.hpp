@@ -10,7 +10,7 @@ using namespace std;
 
 class AstronautaUtils {
 public:
-    static map<string, Astronauta> cadastrarAstronauta(map<string, Astronauta> &astronautas) {
+    static void cadastrarAstronauta(map<string, Astronauta> &astronautas) {
 
         string cpf;
         cout << "Digite o cpf do astronauta: ";
@@ -28,13 +28,12 @@ public:
 
         if (astronautas.find(cpf) == astronautas.end()) {
             astronautas[cpf] = astronauta;
-            cout << "Astronauta " << nome << " cadastrado(a)" << endl << endl;
+            cout << "\nAstronauta " << nome << " cadastrado(a)" << endl << endl;
         }
         else {
-            cout << "Um astronauta com este cpf já existe" << endl;
+            cout << "\nUm astronauta com este cpf já existe" << endl;
         }
 
-        return astronautas;
     }
 
     static Astronauta findAstronauta(string cpf, map<string, Astronauta> &astronautas) {
@@ -52,7 +51,7 @@ public:
             }
 
             if (print) {
-            cout << endl << Astronauta::to_string(it->second) << endl;
+                cout << endl << Astronauta::to_string(it->second) << endl;
             }
         }
 
