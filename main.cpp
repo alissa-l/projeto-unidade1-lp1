@@ -45,6 +45,14 @@ int main() {
 
                 map<string, Astronauta> &astronautasRef = astronautas;
                 map<int, Voo> &voosRef = voos;
+
+                Astronauta astronauta = Astronauta("123", "Me", 20, false, true);
+                astronautas["123"] = astronauta;
+
+                Voo voo = Voo(42);
+                voos[42] = voo;
+
+
         switch (opcao) {
             case 1:
                 AstronautaUtils::cadastrarAstronauta(astronautasRef);
@@ -53,7 +61,7 @@ int main() {
                 VooUtils::cadastrarVoo(voosRef, astronautasRef);
                 break;
             case 3:
-                VooUtils::cadastrarAstronautaVoo(voos, astronautas);
+                VooUtils::cadastrarAstronautaVoo(voosRef, astronautasRef);
                 break;
             case 4:
             case 5:

@@ -18,7 +18,7 @@ class VooUtils {
         int codigo;
         cout << "Digite o código de voo: ";
         cin >> codigo;
-        
+
         char opcao;
         cout << "Gostaria de cadastrar um astronauta ao voo? (S/N) ";
         cin >> opcao;
@@ -50,7 +50,6 @@ class VooUtils {
                     break;
                 }
             }
-
         }
 
         voos[codigo] = voo;
@@ -61,6 +60,11 @@ class VooUtils {
     }
 
     static void cadastrarAstronautaVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
+
+        if (voos.empty() == true) {
+            cout << "Não há nenhum voo cadastrado\n";
+            return;
+        }
 
         while (true) {
 
@@ -77,29 +81,41 @@ class VooUtils {
             cin >> codigoOpcao;
             Voo vooEscolhido;
             if (voos.find(codigoOpcao) == voos.end()) {
-                cout << "Digite uma opção válida.";
+                cout << "Digite uma opção válida.\n\n";
                 continue;
             } else {
                 vooEscolhido = voos[codigoOpcao];
             }
 
-            cout << "Astronautas disponiveis:" << endl;
+            while (true) {
 
-            map<string, Astronauta> astronautasVivos = AstronautaUtils::listAstronautasVivosDisponiveis(astronautas, true);
+                cout << "Astronautas disponiveis:" << endl;
 
-            string cpf;
-            cout << "Digite o cpf do astronauta que você quer cadastrar ao voo: ";
-            cin >> cpf;
+                map<string, Astronauta> astronautasVivos =
+                    AstronautaUtils::listAstronautasVivosDisponiveis(astronautas, true);
 
-            if (astronautasVivos.find(cpf) == astronautasVivos.end()) {
-                astronautas[cpf].ocupado = true;
+                
+                string cpf;
+                cout << "Digite o cpf do astronauta que você quer cadastrar ao voo: ";
+                cin >> cpf;
+
+                if (astronautasVivos.find(cpf) == astronautasVivos.end()) {
+                    cout << "Digite um cpf valido.\n\n";
+                }
+
+                Astronauta astronautaEscolhido = astronautas[cpf];
+                astronautaEscolhido.ocupado = true;
+
+                vooEscolhido.astronautas.push_back(astronautaEscolhido);
+
+                cout << "Astronauta: " << astronautaEscolhido.nome << " cadastrado(a) no voo " << vooEscolhido.codigoVoo
+                     << "\n\n";
+
+                astronautas[cpf] = astronautaEscolhido;
+                voos[vooEscolhido.codigoVoo] = vooEscolhido;
+                break;
             }
-
-            Astronauta astronauta = AstronautaUtils::findAstronauta(cpf, astronautas);
-
-            vooEscolhido.astronautas.push_back(astronauta);
-
-            cout << "Astronauta: " << astronauta.nome << "cadastrado no voo " << vooEscolhido.codigoVoo;
+            break;
         }
     }
 };
