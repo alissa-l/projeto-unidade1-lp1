@@ -13,109 +13,49 @@ using namespace std;
 
 class VooUtils {
   public:
-    static void cadastrarVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
+    static Voo* selectVooDisponivel(map<int, Voo> voos) {
 
-        int codigo;
-        cout << "Digite o código de voo: ";
-        cin >> codigo;
-
-        char opcao;
-        cout << "Gostaria de cadastrar um astronauta ao voo? (S/N) ";
-        cin >> opcao;
-
-        Voo voo = Voo(codigo);
-
-        if (opcao == 'S' || opcao == 's') {
-            while (true) {
-                cout << "Astronautas disponiveis:" << endl;
-
-                map<string, Astronauta> astronautasVivos =
-                    AstronautaUtils::listAstronautasVivosDisponiveis(astronautas, true);
-
-                string cpf;
-                cout << "Digite o cpf do astronauta que você quer cadastrar ao voo: ";
-                cin >> cpf;
-
-                if (astronautasVivos.find(cpf) == astronautasVivos.end()) {
-                    astronautas[cpf].ocupado = true;
-                }
-
-                Astronauta astronauta = AstronautaUtils::findAstronauta(cpf, astronautas);
-
-                voo.astronautas.push_back(astronauta);
-
-                cout << "\nGostaria de cadastrar outro astronauta ao voo? (S/N) ";
-                cin >> opcao;
-                if (opcao == 'N' || opcao == 'n') {
-                    break;
-                }
-            }
+        if (voos.empty()) {
+            cout << "\n\nNão há nenhum voo cadastrado.\n\n";
+            return NULL;
         }
 
-        voos[codigo] = voo;
-
-        cout << "\nVoo " << codigo << " criado com sucesso! \n\n";
-
-        cout << Voo::to_string(voo);
-    }
-
-    static void cadastrarAstronautaVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
-
-        if (voos.empty() == true) {
-            cout << "Não há nenhum voo cadastrado\n";
-            return;
-        }
+        vector<Voo> voosDisponiveis = findVoosDisponiveis(voos);
+        Voo vooEscolhido;
 
         while (true) {
 
             cout << "Voos disponiveis:\n\n";
 
-            map<int, Voo>::iterator it = voos.begin();
-
-            for (it; it != voos.end(); it++) {
-                cout << Voo::to_string(it->second);
+            for (auto vit : voosDisponiveis) {
+                cout << Voo::to_string(vit);
             }
 
             cout << "Digite o código de voo: ";
             int codigoOpcao;
             cin >> codigoOpcao;
-            Voo vooEscolhido;
             if (voos.find(codigoOpcao) == voos.end()) {
                 cout << "Digite uma opção válida.\n\n";
                 continue;
             } else {
                 vooEscolhido = voos[codigoOpcao];
             }
-
-            while (true) {
-
-                cout << "Astronautas disponiveis:" << endl;
-
-                map<string, Astronauta> astronautasVivos =
-                    AstronautaUtils::listAstronautasVivosDisponiveis(astronautas, true);
-
-                
-                string cpf;
-                cout << "Digite o cpf do astronauta que você quer cadastrar ao voo: ";
-                cin >> cpf;
-
-                if (astronautasVivos.find(cpf) == astronautasVivos.end()) {
-                    cout << "Digite um cpf valido.\n\n";
-                }
-
-                Astronauta astronautaEscolhido = astronautas[cpf];
-                astronautaEscolhido.ocupado = true;
-
-                vooEscolhido.astronautas.push_back(astronautaEscolhido);
-
-                cout << "Astronauta: " << astronautaEscolhido.nome << " cadastrado(a) no voo " << vooEscolhido.codigoVoo
-                     << "\n\n";
-
-                astronautas[cpf] = astronautaEscolhido;
-                voos[vooEscolhido.codigoVoo] = vooEscolhido;
-                break;
-            }
-            break;
         }
+        Voo *vooEscolhidoPtr = &vooEscolhido;
+        return vooEscolhidoPtr;
+    }
+
+  private:
+    static vector<Voo> findVoosDisponiveis(map<int, Voo> voos) {
+
+        vector<Voo> voosDisponiveis;
+        for (auto vit : voos) {
+
+            if (vit.second.lancado == false && vit.second.explodido == false) {
+                voosDisponiveis.push_back(vit.second);
+            }
+        }
+
+        return voosDisponiveis;
     }
 };

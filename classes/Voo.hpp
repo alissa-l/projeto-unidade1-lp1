@@ -14,6 +14,8 @@ public:
 
     int codigoVoo;
     vector<Astronauta> astronautas;
+    bool lancado;
+    bool explodido;
 
     static string to_string(Voo voo) {
         int codigo = voo.codigoVoo;

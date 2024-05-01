@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 #include "../classes/Astronauta.hpp"
@@ -9,49 +9,51 @@
 using namespace std;
 
 class AstronautaUtils {
-public:
-    static void cadastrarAstronauta(map<string, Astronauta> &astronautas) {
+  public:
+    static Astronauta *selectAstronautaDisponivel(map<string, Astronauta> astronautas) {
+
+        if (astronautas.empty()) {
+            cout << "\nNão há nenhum astronauta cadastrado.\n";
+            Astronauta *ptr = NULL;
+            return ptr;
+        }
+
+        map<string, Astronauta> astronautasDisponiveis = listAstronautasVivosDisponiveis(astronautas);
+
+        if(astronautasDisponiveis.empty()) {
+            cout << "\nNão há astronautas disponiveis\n\n";
+            return NULL;
+        }
+
+        cout << "\nAstronautas disponiveis:\n\n";
+
+        for (auto ait : astronautasDisponiveis) {
+            Astronauta::to_string(ait.second);
+        }
 
         string cpf;
-        cout << "Digite o cpf do astronauta: ";
-        cin >> cpf;
+        while (true) {
+            cout << "\nDigite o cpf do astronauta: ";
+            cin >> cpf;
 
-        string nome;
-        cout << "Digite o nome do astronauta: ";
-        cin >> nome;
-
-        int idade;
-        cout << "Digite a idade do astronauta: ";
-        cin >> idade;
-
-        Astronauta astronauta = Astronauta(cpf, nome, idade, false, true);
-
-        if (astronautas.find(cpf) == astronautas.end()) {
-            astronautas[cpf] = astronauta;
-            cout << "\nAstronauta " << nome << " cadastrado(a)" << endl << endl;
+            if (astronautasDisponiveis.find(cpf) == astronautasDisponiveis.end()) {
+                cout << "\nDigite um cpf válido!";
+                break;
+            }
         }
-        else {
-            cout << "\nUm astronauta com este cpf já existe" << endl;
-        }
-
+        Astronauta *astronautaPtr = &astronautasDisponiveis[cpf];
+        return astronautaPtr;
     }
 
-    static Astronauta findAstronauta(string cpf, map<string, Astronauta> &astronautas) {
-        return astronautas[cpf];
-    }
-
-    static map<string, Astronauta> listAstronautasVivosDisponiveis(map<string, Astronauta> &astronautas, bool print) {
+  private:
+    static map<string, Astronauta> listAstronautasVivosDisponiveis(map<string, Astronauta> &astronautas) {
         map<string, Astronauta> astronautasVivosDisponiveis;
 
         for (map<string, Astronauta>::iterator it = astronautas.begin(); it != astronautas.end(); it++) {
             Astronauta astronautaAtual = it->second;
 
-            if (astronautaAtual.vivo && !astronautaAtual.ocupado) {
+            if (astronautaAtual.vivo == true && astronautaAtual.ocupado == false) {
                 astronautasVivosDisponiveis[astronautaAtual.cpf] = astronautaAtual;
-            }
-
-            if (print) {
-                cout << endl << Astronauta::to_string(it->second) << endl;
             }
         }
 

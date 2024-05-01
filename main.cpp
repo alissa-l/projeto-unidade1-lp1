@@ -9,14 +9,29 @@
 #include "utils/AstronautaUtils.hpp"
 #include "utils/vooUtils.hpp"
 
+#include "features/VooFeatures.hpp"
+#include "features/AstronautaFeatures.hpp"
+
 using namespace std;
 
 // Estruturas
 map<string, Astronauta> astronautas;
 map<int, Voo> voos;
 
+map<string, Astronauta> &astronautasRef = astronautas;
+map<int, Voo> &voosRef = voos;
+
 
 int main() {
+
+    Astronauta astronauta = Astronauta("123", "Me", 20, true, true);
+    astronautas["123"] = astronauta;
+
+    Voo voo = Voo(42);
+    voos[42] = voo;
+
+    voos[42].astronautas.push_back(astronauta);
+
 
     string SGA = "\t\t   _____ _________\n"
                       "\t\t  / ___// ____/   |\n"
@@ -43,27 +58,20 @@ int main() {
         cin >> opcao;
 
 
-                map<string, Astronauta> &astronautasRef = astronautas;
-                map<int, Voo> &voosRef = voos;
-
-                Astronauta astronauta = Astronauta("123", "Me", 20, false, true);
-                astronautas["123"] = astronauta;
-
-                Voo voo = Voo(42);
-                voos[42] = voo;
-
 
         switch (opcao) {
             case 1:
-                AstronautaUtils::cadastrarAstronauta(astronautasRef);
+                AstronautaFeatures::cadastrarAstronauta(astronautasRef);
                 break;
             case 2:
-                VooUtils::cadastrarVoo(voosRef, astronautasRef);
+                VooFeatures::cadastrarVoo(voosRef, astronautasRef);
                 break;
             case 3:
-                VooUtils::cadastrarAstronautaVoo(voosRef, astronautasRef);
+                VooFeatures::cadastrarAstronautaVoo(voosRef, astronautasRef);
                 break;
             case 4:
+                VooFeatures::removerAstronautaVoo(voosRef, astronautasRef);
+                break;
             case 5:
             case 6:
             case 7:
