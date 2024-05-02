@@ -24,13 +24,11 @@ map<int, Voo> &voosRef = voos;
 
 int main() {
 
-    Astronauta astronauta = Astronauta("123", "Me", 20, true, true);
+    Astronauta astronauta = Astronauta("123", "Me", 20, false, true);
     astronautas["123"] = astronauta;
 
     Voo voo = Voo(42);
     voos[42] = voo;
-
-    voos[42].astronautas.push_back(astronauta);
 
 
     string SGA = "\t\t   _____ _________\n"

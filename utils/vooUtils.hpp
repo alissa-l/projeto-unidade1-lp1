@@ -13,17 +13,17 @@ using namespace std;
 
 class VooUtils {
   public:
-    static Voo* selectVooDisponivel(map<int, Voo> voos) {
+    static Voo selectVooDisponivel(map<int, Voo> voos) {
 
         if (voos.empty()) {
             cout << "\n\nNão há nenhum voo cadastrado.\n\n";
-            return NULL;
+            return Voo(050505);
         }
-
         vector<Voo> voosDisponiveis = findVoosDisponiveis(voos);
         Voo vooEscolhido;
 
         while (true) {
+
 
             cout << "Voos disponiveis:\n\n";
 
@@ -39,10 +39,10 @@ class VooUtils {
                 continue;
             } else {
                 vooEscolhido = voos[codigoOpcao];
+                break;
             }
         }
-        Voo *vooEscolhidoPtr = &vooEscolhido;
-        return vooEscolhidoPtr;
+        return vooEscolhido;
     }
 
   private:
@@ -51,7 +51,7 @@ class VooUtils {
         vector<Voo> voosDisponiveis;
         for (auto vit : voos) {
 
-            if (vit.second.lancado == false && vit.second.explodido == false) {
+            if (!vit.second.lancado && !vit.second.explodido) {
                 voosDisponiveis.push_back(vit.second);
             }
         }

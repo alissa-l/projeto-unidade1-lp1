@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "../classes/Astronauta.hpp"
 #include "../classes/Voo.hpp"
@@ -30,16 +31,16 @@ class VooFeatures {
             cin >> opcao;
 
             Voo voo = Voo(codigo);
-
+            Astronauta astronautaEscolhido;
             if (opcao == 'S' || opcao == 's') {
                 while (true) {
-                    Astronauta *astronautaSelecionado = AstronautaUtils::selectAstronautaDisponivel(astronautas);
+                    astronautaEscolhido = AstronautaUtils::selectAstronautaDisponivel(astronautas);
 
-                    if ( astronautaSelecionado == NULL) {
+                    if ( astronautaEscolhido.nome == "") {
                         return;
                     }
-
-                    voo.astronautas.push_back(*astronautaSelecionado);
+                    astronautaEscolhido.ocupado = true;
+                    voo.astronautas.push_back(astronautaEscolhido);
 
                     cout << "\nGostaria de cadastrar outro astronauta ao voo? (S/N) ";
                     cin >> opcao;
@@ -49,49 +50,89 @@ class VooFeatures {
                 }
             }
 
-            voos[codigo] = voo;
+            voos.insert({codigo, voo});
+            astronautas.erase(astronautaEscolhido.cpf);
+            astronautas.insert({astronautaEscolhido.cpf, astronautaEscolhido});
 
             cout << "\nVoo " << codigo << " criado com sucesso! \n\n";
 
             cout << Voo::to_string(voo);
+            break;
         }
     }
 
     static void cadastrarAstronautaVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
 
-        if (voos.empty() == true) {
+        if (voos.empty()) {
             cout << "Não há nenhum voo cadastrado\n";
             return;
         }
 
         while (true) {
 
-            Astronauta *astronautaEscolhido = AstronautaUtils::selectAstronautaDisponivel(astronautas);
-            
-            if (astronautaEscolhido == NULL) {
+            Voo vooEscolhido = VooUtils::selectVooDisponivel(voos);
+
+            if (vooEscolhido.codigoVoo == 050505) {
                 return;
             }
 
-            Voo *vooEscolhido = VooUtils::selectVooDisponivel(voos);
+            Astronauta astronautaEscolhido = AstronautaUtils::selectAstronautaDisponivel(astronautas);
+            
+            if (astronautaEscolhido.nome == "") {
+                return;
+            }
 
-            astronautaEscolhido->ocupado = true;
+            astronautaEscolhido.ocupado = true;
 
-            vooEscolhido->astronautas.push_back(*astronautaEscolhido);
+            vooEscolhido.astronautas.push_back(astronautaEscolhido);
 
-            cout << Voo::to_string(*vooEscolhido);
+            cout << Voo::to_string(vooEscolhido);
 
-            cout << "Astronauta: " << astronautaEscolhido->nome << " cadastrado(a) no voo " << vooEscolhido->codigoVoo
+            cout << "Astronauta: " << astronautaEscolhido.nome << " cadastrado(a) no voo " << vooEscolhido.codigoVoo
                  << "\n\n";
 
-            string cpf = astronautaEscolhido->cpf;
-            astronautas[cpf] = *astronautaEscolhido;
-
-            voos[vooEscolhido->codigoVoo] = *vooEscolhido;
+            astronautas.erase(astronautaEscolhido.cpf);
+            astronautas.insert({astronautaEscolhido.cpf, astronautaEscolhido});
+            voos.erase(vooEscolhido.codigoVoo);
+            voos.insert({vooEscolhido.codigoVoo, vooEscolhido});
 
             break;
         }
     }
 
     static void removerAstronautaVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
+
+        if (voos.empty()) {
+            cout << "Não há nenhum voo cadastrado\n";
+            return;
+        }
+
+        while (true) {
+
+            Voo vooEscolhido = VooUtils::selectVooDisponivel(voos);
+
+            if (vooEscolhido.codigoVoo == 050505) {
+                return;
+            }
+
+            vector<Astronauta> astronautasVoo = vooEscolhido.astronautas;
+            Astronauta astronautaEscolhido = AstronautaUtils::removeAstronauta(astronautasVoo);
+
+            if(astronautaEscolhido.nome == "") {
+                return;
+            }
+
+            astronautaEscolhido.ocupado = false;
+
+            cout << Voo::to_string(vooEscolhido);
+
+            astronautas.erase(astronautaEscolhido.cpf);
+            astronautas.insert({astronautaEscolhido.cpf, astronautaEscolhido});
+            voos.erase(vooEscolhido.codigoVoo);
+            voos.insert({vooEscolhido.codigoVoo, vooEscolhido});
+
+            break;
+        }
+
     }
 };

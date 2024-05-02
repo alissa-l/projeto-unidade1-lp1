@@ -10,50 +10,89 @@ using namespace std;
 
 class AstronautaUtils {
   public:
-    static Astronauta *selectAstronautaDisponivel(map<string, Astronauta> astronautas) {
+    static Astronauta selectAstronautaDisponivel(map<string, Astronauta> astronautas) {
 
         if (astronautas.empty()) {
             cout << "\nNão há nenhum astronauta cadastrado.\n";
-            Astronauta *ptr = NULL;
-            return ptr;
+            Astronauta *ptr = nullptr;
+            return {};
         }
 
         map<string, Astronauta> astronautasDisponiveis = listAstronautasVivosDisponiveis(astronautas);
 
-        if(astronautasDisponiveis.empty()) {
+        if (astronautasDisponiveis.empty()) {
             cout << "\nNão há astronautas disponiveis\n\n";
-            return NULL;
+            return {};
         }
 
         cout << "\nAstronautas disponiveis:\n\n";
-
         for (auto ait : astronautasDisponiveis) {
-            Astronauta::to_string(ait.second);
+            cout << Astronauta::to_string(ait.second) << "\n";
         }
 
+        Astronauta astronauta = findAstronautaUser(astronautasDisponiveis);
+
+        return astronauta;
+    }
+
+    static Astronauta removeAstronauta(vector<Astronauta> astronautas) {
+
+        if (astronautas.empty()) {
+            cout << "\nNão há nenhum astronauta cadastrado no voo.\n";
+            Astronauta *ptr = nullptr;
+            return {};
+        }
+
+
+        if (astronautas.empty()) {
+            cout << "\nNão há astronautas disponiveis\n\n";
+            return {};
+        }
+
+        cout << "\nAstronautas cadastrados no voo:\n\n";
+        for (auto ait : astronautas) {
+            cout << Astronauta::to_string(ait) << "\n";
+        }
+
+        map<string, Astronauta> astronautasMap;
+        for(auto &ait : astronautas) {
+            astronautasMap.insert({ait.cpf, ait});
+        }
+
+        Astronauta astronauta = findAstronautaUser(astronautasMap);
+
+        return astronauta;
+        
+    }
+
+
+  private:
+    static Astronauta findAstronautaUser(map<string, Astronauta> astronautas) {
         string cpf;
         while (true) {
             cout << "\nDigite o cpf do astronauta: ";
             cin >> cpf;
 
-            if (astronautasDisponiveis.find(cpf) == astronautasDisponiveis.end()) {
+            if (astronautas.find(cpf) == astronautas.end())  {
                 cout << "\nDigite um cpf válido!";
-                break;
+                continue;
             }
+            break;
         }
-        Astronauta *astronautaPtr = &astronautasDisponiveis[cpf];
-        return astronautaPtr;
-    }
 
-  private:
+        Astronauta astronauta = astronautas.find(cpf)->second;
+
+        return astronauta;
+    }
+    
     static map<string, Astronauta> listAstronautasVivosDisponiveis(map<string, Astronauta> &astronautas) {
         map<string, Astronauta> astronautasVivosDisponiveis;
 
-        for (map<string, Astronauta>::iterator it = astronautas.begin(); it != astronautas.end(); it++) {
-            Astronauta astronautaAtual = it->second;
+        for (auto &ita : astronautas) {
+            Astronauta astronautaAtual = ita.second;
 
-            if (astronautaAtual.vivo == true && astronautaAtual.ocupado == false) {
-                astronautasVivosDisponiveis[astronautaAtual.cpf] = astronautaAtual;
+            if (astronautaAtual.vivo && !astronautaAtual.ocupado) {
+                astronautasVivosDisponiveis.insert({astronautaAtual.cpf, astronautaAtual});
             }
         }
 
