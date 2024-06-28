@@ -35,6 +35,20 @@ class AstronautaUtils {
         return astronauta;
     }
 
+    static vector<Astronauta> selectAstronautaDisponivel(vector<Astronauta> astronautas) {
+
+        vector<Astronauta> astronautasDisponiveis;
+
+        if (astronautas.empty()) {
+            cout << "\nNão há nenhum astronauta cadastrado.\n";
+            Astronauta *ptr = nullptr;
+            return {};
+        }
+
+        return astronautasDisponiveis;
+
+    }
+
     static Astronauta removeAstronauta(vector<Astronauta> astronautas) {
 
         if (astronautas.empty()) {

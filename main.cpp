@@ -55,8 +55,6 @@ int main() {
 
         cin >> opcao;
 
-
-
         switch (opcao) {
             case 1:
                 AstronautaFeatures::cadastrarAstronauta(astronautasRef);
@@ -65,10 +63,10 @@ int main() {
                 VooFeatures::cadastrarVoo(voosRef, astronautasRef);
                 break;
             case 3:
-                VooFeatures::cadastrarAstronautaVoo(voosRef, astronautasRef);
+                VooFeatures::astronautaVoo(voosRef, astronautasRef, false);
                 break;
             case 4:
-                VooFeatures::removerAstronautaVoo(voosRef, astronautasRef);
+                VooFeatures::astronautaVoo(voosRef, astronautasRef, true);
                 break;
             case 5:
             case 6:

@@ -17,8 +17,9 @@ class VooUtils {
 
         if (voos.empty()) {
             cout << "\n\nNão há nenhum voo cadastrado.\n\n";
-            return Voo(050505);
+            return {};
         }
+
         vector<Voo> voosDisponiveis = findVoosDisponiveis(voos);
         Voo vooEscolhido;
 

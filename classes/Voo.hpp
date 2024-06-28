@@ -7,7 +7,9 @@ using namespace std;
 
 class Voo {
 public:
-    Voo(){};
+    Voo(){
+        codigoVoo = 9999999;
+    };
     Voo(int codigoVoo1) {
         codigoVoo = codigoVoo1;
     };
