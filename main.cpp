@@ -6,7 +6,7 @@
 #include "classes/Astronauta.hpp"
 #include "classes/Voo.hpp"
 
-#include "utils/AstronautaUtils.hpp"
+#include "utils/AstronautaUtils.cpp"
 #include "utils/vooUtils.hpp"
 
 #include "features/VooFeatures.hpp"

@@ -7,7 +7,7 @@
 
 #include "../classes/Astronauta.hpp"
 #include "../classes/Voo.hpp"
-#include "../utils/AstronautaUtils.hpp"
+#include "../utils/AstronautaUtils.cpp"
 
 using namespace std;
 
