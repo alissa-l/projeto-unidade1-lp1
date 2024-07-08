@@ -17,8 +17,10 @@ public:
     string cpf;
     string nome;
     int idade;
+    bool cadastrado;
     bool ocupado;
     bool vivo;
+    map<int, bool> voos;
 
     static string to_string(Astronauta astronauta) {
         int idade = astronauta.idade;

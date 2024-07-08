@@ -8,8 +8,9 @@
 
 #include "../classes/Astronauta.hpp"
 #include "../classes/Voo.hpp"
-#include "../utils/AstronautaUtils.cpp"
-#include "../utils/vooUtils.hpp"
+#include "../utils/AstronautaUtils.hpp"
+#include "../utils/VooUtils.hpp"
+#include "../utils/PrettyPrintUtils.hpp"
 
 class VooFeatures {
   public:
@@ -31,32 +32,12 @@ class VooFeatures {
                 continue;
             }
 
-            char opcao;
-            cout << "Gostaria de cadastrar um astronauta ao voo? (S/N) ";
-            cin >> opcao;
 
             Voo voo = Voo(codigo);
-            Astronauta astronautaEscolhido;
-            if (opcao == 'S' || opcao == 's') {
-                while (true) {
-                    astronautaEscolhido = AstronautaUtils::selectAstronauta(astronautas);
 
-                    if ( astronautaEscolhido.nome.empty()) {
-                        return;
-                    }
-                    voo.astronautas.push_back(astronautaEscolhido);
 
-                    cout << "\nGostaria de cadastrar outro astronauta ao voo? (S/N) ";
-                    cin >> opcao;
-                    if (opcao == 'N' || opcao == 'n') {
-                        break;
-                    }
-                }
-            }
 
-            voos.insert({codigo, voo});
-            astronautas.erase(astronautaEscolhido.cpf);
-            astronautas.insert({astronautaEscolhido.cpf, astronautaEscolhido});
+            voos[codigo] = voo;
 
             cout << "\nVoo " << codigo << " criado com sucesso! \n\n";
 
@@ -89,8 +70,13 @@ class VooFeatures {
             Astronauta astronautaEscolhido;
             if(remover) {
                 astronautaEscolhido = AstronautaUtils::selectAstronautaOcupado(vooEscolhido.astronautas);
+                astronautaEscolhido.cadastrado = false;
+                astronautaEscolhido.voos[vooEscolhido.codigoVoo] = false;
+
             } else {
                 astronautaEscolhido = AstronautaUtils::selectAstronauta(astronautas);
+                astronautaEscolhido.cadastrado = true;
+                astronautaEscolhido.voos[vooEscolhido.codigoVoo] = true;
             }
 
             if (astronautaEscolhido.cpf.empty()) {
@@ -101,7 +87,7 @@ class VooFeatures {
                 vector<Astronauta> astroOriginal = vooEscolhido.astronautas;
                 vector<Astronauta> newAstronautas;
                 for(const auto& x : vooEscolhido.astronautas) {
-                    if(x.cpf == astronautaEscolhido.cpf) {
+                    if(x.cpf != astronautaEscolhido.cpf) {
                         newAstronautas.push_back(x);
                     }
                 }
@@ -110,9 +96,26 @@ class VooFeatures {
                 cout << "Astronauta: " << astronautaEscolhido.nome << " removido(a) do voo " << vooEscolhido.codigoVoo
                      << "\n\n";
             } else {
-                cout << Voo::to_string(vooEscolhido) << endl;
-                cout << "Astronauta: " << astronautaEscolhido.nome << " cadastrado(a) no voo " << vooEscolhido.codigoVoo
-                     << "\n\n";
+
+                string cpf = astronautaEscolhido.cpf;
+                bool incluir = true;
+
+                for(const auto& x : vooEscolhido.astronautas) {
+                    if(x.cpf == cpf) {
+                        incluir = false;
+                    }
+                }
+
+                if(incluir) {
+                    vooEscolhido.astronautas.push_back(astronautaEscolhido);
+                    cout << Voo::to_string(vooEscolhido) << endl;
+                    cout << "Astronauta: " << astronautaEscolhido.nome << " cadastrado(a) no voo " << vooEscolhido.codigoVoo
+                         << "\n\n";
+                } else {
+                    cout << "Astronauta: " << astronautaEscolhido.nome << " já está cadastrado(a) no voo " << vooEscolhido.codigoVoo << "\n\n";
+                }
+
+
             }
 
             voos[vooEscolhido.codigoVoo] = vooEscolhido;
@@ -127,8 +130,12 @@ class VooFeatures {
 
         Voo vooEscolhido = VooUtils::selectVooDisponivel(voos);
 
+        if (vooEscolhido.codigoVoo == 9999999) {
+            return;
+        }
+
         if (vooEscolhido.astronautas.empty()) {
-            cout << "O voo " << vooEscolhido.codigoVoo << " não possui astronautas cadastrados e não pode ser lançado";
+            cout << "O voo " << vooEscolhido.codigoVoo << " não possui astronautas cadastrados e não pode ser lançado" << "\n";
             return;
         }
 
@@ -152,25 +159,57 @@ class VooFeatures {
         }
 
         vooEscolhido.astronautas = newAstronautas;
+        vooEscolhido.lancado = true;
 
         voos[vooEscolhido.codigoVoo] = vooEscolhido;
 
         cout << "O voo " << vooEscolhido.codigoVoo << " foi lançado com sucesso!!!" << endl;
+        cout << PrettyPrintUtils::foguete() << "\n\n\n";
 
     }
 
     static void explodirVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
 
-        //TODO: Selecionar voo pra explodir - precisa estar lançado
-        //TODO: Matar astronautas
+        Voo vooEscolhido = VooUtils::selectVooLancado(voos);
+
+        if (vooEscolhido.codigoVoo == 9999999) {
+            return;
+        }
+
+        vector<Astronauta> astronautasVoo = vooEscolhido.astronautas;
+        for(auto va : astronautasVoo) {
+            va.vivo = false;
+            va.ocupado = false;
+            va.cadastrado = false;
+            astronautas[va.cpf] = va;
+        }
+        vooEscolhido.astronautas = astronautasVoo;
+
+        vooEscolhido.explodido = true;
+
+        voos[vooEscolhido.codigoVoo] = vooEscolhido;
+
+        cout << "O voo " << vooEscolhido.codigoVoo << " explodiu por alguma razão misteriosa." << "\n\n";
 
     }
 
     static void finalizarVoo(map<int, Voo> &voos, map<string, Astronauta> &astronautas) {
 
-        //TODO: Selecionar voo pra finalizar - precisa estar lancado
-        //TODO: Finalizar voo
-        //TODO: Desocupar astronautas
+        Voo vooEscolhido = VooUtils::selectVooLancado(voos);
+
+        vector<Astronauta> astronautasVoo = vooEscolhido.astronautas;
+        for(auto va : astronautasVoo) {
+            va.ocupado = false;
+            va.cadastrado = false;
+            astronautas[va.cpf] = va;
+        }
+
+        vooEscolhido.astronautas = astronautasVoo;
+
+        vooEscolhido.finalizado = true;
+
+        voos[vooEscolhido.codigoVoo] = vooEscolhido;
 
     }
+
 };
