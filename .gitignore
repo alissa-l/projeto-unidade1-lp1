@@ -5,3 +5,5 @@ CMakeCache.txt
 CMakeFiles/
 .vscode
 Makefile
+build/
+projeto1
